@@ -3,6 +3,7 @@ package com.linsglf.springmongodb.resources;
 import com.linsglf.springmongodb.domain.Post;
 import com.linsglf.springmongodb.domain.User;
 import com.linsglf.springmongodb.dto.UserDTO;
+import com.linsglf.springmongodb.services.PostService;
 import com.linsglf.springmongodb.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ public class UserResource {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private PostService postService;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
@@ -42,6 +46,7 @@ public class UserResource {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
+        postService.deleteUserPosts(id);
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -51,6 +56,7 @@ public class UserResource {
         User obj = service.fromDTO(objDto);
         obj.setId(id);
         service.update(obj);
+        postService.updateAuthor(id);
         return ResponseEntity.noContent().build();
     }
 
