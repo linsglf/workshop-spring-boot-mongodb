@@ -10,4 +10,9 @@ public interface PostRepository extends MongoRepository<Post, String> {
 
     @Query("{ 'author.id' : ?0 }")
     public List<Post> findByAuthorId(String id);
+
+    List<Post> findByTitleContainingIgnoreCase(String text);
+
+    @Query("{ 'title' : { $regex: ?0, $options: 'i' } }")
+    List<Post> searchTitle(String text);
 }

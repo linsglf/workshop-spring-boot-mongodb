@@ -37,4 +37,8 @@ public class PostService {
         List<Post> posts = userService.findById(id).getPosts();
         repo.deleteAll(posts);
     }
+
+    public List<Post> findByTitle(String text) {
+        return repo.searchTitle(text);
+    }
 }
